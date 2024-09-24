@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+# When committing with "git commit -m <message>" flag, PRE_COMMIT_COMMIT_MSG_SOURCE will contain
+# "message", and the COMMIT_EDITMSG file will contain the <message>. In this case, no editor
+# for the commit message will be opened, so we don't need to enter the template. This is also the
+# case for when running "git commit" with the --amend flag. In this case PRE_COMMIT_COMMIT_MSG_SOURCE
+# contains 'commit'.
+#
+# When committing without the -m flag: "git commit", the commit message editor will be opened
+# with the contents of COMMIT_EDITMSG, which we set to our template
+if [ "$PRE_COMMIT_COMMIT_MSG_SOURCE" != "message" ] && [ "$PRE_COMMIT_COMMIT_MSG_SOURCE" != "commit" ]; then
+
+    # Get the directory from the path - This is needed since this will be stored in a cache
+    # directory so we need the path to that to access the template file with the correct path
+    dir_path=$(dirname "$0")
+
+    filename=".gitmessage_template"
+
+    # Concatenate the directory path with the filename
+    full_path="${dir_path}/${filename}"
+
+    cat "$full_path" > .git/COMMIT_EDITMSG
+
+fi

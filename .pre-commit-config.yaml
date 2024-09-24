@@ -1,0 +1,41 @@
+default_install_hook_types: [pre-commit, commit-msg, prepare-commit-msg]
+default_stages: [commit]
+
+repos:
+  - repo: local
+    hooks:
+      - id: commit-message-checker
+        name: commit-message-checker
+        entry: hooks/commit_message_checker/commit_msg_checker.py
+        language: script
+        always_run: false
+        stages: [commit-msg]
+      - id: apply-commit-message-template
+        name: apply-commit-message-template
+        entry: hooks/apply-commit-message-template/apply-commit-message-template
+        language: script
+        stages: [prepare-commit-msg]
+      - id: test-commit-checker-script
+        name: test-commit-checker-script
+        entry: hooks/commit_message_checker/tests/test_commit_checker.py
+        language: script
+        stages: [commit]
+        files: ^hooks/commit_message_checker/(commit_msg_checker\.py|tests/test_commit_checker\.py|tests/test_commits\.yml)$
+
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v2.7.1
+    hooks:
+      - id: prettier
+        files: \.(markdown|md|yaml|yml)$
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: check-yaml
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: check-executables-have-shebangs
+      - id: check-shebang-scripts-are-executable
+      - id: no-commit-to-branch
+        args: ["--branch", "main"]

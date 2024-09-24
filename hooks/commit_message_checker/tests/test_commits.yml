@@ -1,0 +1,43 @@
+allowed_types:
+  - feat
+  - fix
+  - docs
+  - style
+  - refactor
+  - test
+  - chore
+  - build
+
+should_pass:
+  - "<type>(scope): description"
+
+should_pass_with_fixup_allowed:
+  - "fixup! <type>(scope): description"
+
+should_fail:
+  # Check that type cannot be part of a longer word
+  - "<type>s(scope): description"
+  - "<type>s: description"
+
+  # Problems with scope
+  - "<type>: description"
+  - "<type>scope): description"
+  - "<type>(scope: description"
+  - "<type>(): description"
+
+  # Problems with colon
+  - "<type>(scope) description"
+  - "<type> description"
+  - ":<type> description"
+  - "<type> description:"
+  - "<type>:(scope) description"
+  - ":<type>(scope) description"
+  - "<type>(scope) description:"
+
+  # Problems with prefix
+  - "fixup!<type>(scope): description"
+  - "fixup!<type>: description"
+  - "fix! <type>(scope): description"
+  - "fix! <type>: description"
+  - "fixups! <type>(scope): description"
+  - "fixups! <type>: description"

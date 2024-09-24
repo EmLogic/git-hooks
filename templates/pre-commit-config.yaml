@@ -1,0 +1,28 @@
+default_install_hook_types: [pre-commit, commit-msg, prepare-commit-msg]
+default_stages: [commit]
+minimum_pre_commit_version: 3.6.2
+
+repos:
+  - repo: https://github.com/EmLogic/git-hooks.git
+    rev: v1.2.0
+    hooks:
+      - id: apply-commit-message-template
+      - id: commit-message-checker
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.3
+    hooks:
+      - id: ruff
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: check-yaml
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: check-executables-have-shebangs
+      - id: check-shebang-scripts-are-executable
+      - id: no-commit-to-branch
+        args: ["--branch", "main"]

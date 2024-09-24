@@ -1,0 +1,28 @@
+
+# <type>(<scope>): <subject>
+
+# Closes Jira: <Jira Ticket>
+
+# Allowed <type> values: feat, fix, docs, style, refactor, test, build, chore
+
+# feat     - new feature for the user, not a new feature for build script
+# fix      - bug fix for the user, not a fix to a build script
+# docs     - changes to the documentation
+# style    - formatting, missing semi colons, etc; no production code change
+# refactor - refactoring production code, eg. renaming a variable
+# test     - adding missing tests, refactoring tests; no production code change
+# build    - commits that affect build components like build scripts and makefiles
+# chore    - updating grunt tasks etc; no production code change
+
+# Example <scope> values: init, runner, watcher, config, web-server, proxy
+# Use imperative, present tense in the subject.
+# Remember to place the message always before the "Closes [...]" statement:
+
+# Example:
+# fix(middleware): ensure Range headers adhere more closely to RFC 2616
+#
+# HTTP has been in use by the World-Wide Web global information
+# initiative since 1990. This specification defines the protocol
+# referred to as "HTTP/1.1", and is an update to RFC 2068 [33]
+#
+# Closes Jira: SW-123

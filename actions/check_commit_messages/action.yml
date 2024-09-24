@@ -1,0 +1,17 @@
+name: "Check commit messages"
+
+description: |
+  This action checks the commit messages of a range of commits with
+  the commit message checker script. When used in a PR, the commits that
+  are going to merged will be checked.
+
+runs:
+  using: composite
+  steps:
+    # Need to use $GITHUB_ACTION_PATH here instead of github.action_path due to bug when
+    # calling actions from inside container environments
+    # https://github.com/actions/runner/issues/2185
+    - run: |
+        ${GITHUB_ACTION_PATH}/check_commit_message_range \
+        remotes/origin/${{ github.base_ref }} remotes/origin/${{ github.head_ref }}
+      shell: bash
