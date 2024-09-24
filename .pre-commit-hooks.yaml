@@ -1,0 +1,12 @@
+- id: commit-message-checker
+  name: commit-message-checker
+  entry: hooks/commit_message_checker/commit_msg_checker.py
+  language: script
+  always_run: false
+  stages: [commit-msg]
+- id: apply-commit-message-template
+  name: apply-commit-message-template
+  entry: hooks/apply-commit-message-template/apply-commit-message-template
+  language: script
+  always_run: false
+  stages: [prepare-commit-msg]

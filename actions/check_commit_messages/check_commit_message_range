@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+if [ -z "$1" ]; then
+    echo "Missing 1st argument - target branch name"
+    exit 1
+fi
+
+if [ -z "$2" ]; then
+    echo "Missing 2nd argument - merging branch name"
+    exit 1
+fi
+
+result=0
+
+# Gets the list of commit SHAs that will be merged
+for sha in $(git log --pretty=format:"%H" "$1".."$2")
+do
+    git log -n 1 --pretty=format:"%B" "$sha" > temp
+
+    dir_path=$(dirname "$0")
+
+    if ! python "$dir_path"/../../hooks/commit_message_checker/commit_msg_checker.py ./temp --disallow_fixup; then
+        # Check all commits before exit
+        result=1
+    fi
+done
+
+rm temp
+exit $result
