@@ -28,9 +28,12 @@ def commit_msg_is_valid(input_file, allow_prefix: bool) -> bool:
     # .+ - Matches one or more of any character (the subject)
     if not re.match(r"^(feat|fix|docs|style|refactor|test|chore|build)\([^)]+\): \S.*", commit_message):
 
+        if re.match(r"^(Revert )", commit_message):
+            return True
+
         if allow_prefix:
             if not re.match(r"^fixup! ", commit_message):
-                        return False
+                return False
         else:
             return False
 

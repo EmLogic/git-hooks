@@ -8,7 +8,8 @@
 #
 # When committing without the -m flag: "git commit", the commit message editor will be opened
 # with the contents of COMMIT_EDITMSG, which we set to our template
-if [ "$PRE_COMMIT_COMMIT_MSG_SOURCE" != "message" ] && [ "$PRE_COMMIT_COMMIT_MSG_SOURCE" != "commit" ]; then
+
+apply_message_template() {
 
     # Get the directory from the path - This is needed since this will be stored in a cache
     # directory so we need the path to that to access the template file with the correct path
@@ -21,4 +22,36 @@ if [ "$PRE_COMMIT_COMMIT_MSG_SOURCE" != "message" ] && [ "$PRE_COMMIT_COMMIT_MSG
 
     cat "$full_path" > .git/COMMIT_EDITMSG
 
-fi
+
+}
+
+# The PRE_COMMIT_COMMIT_MSG_SOURCE is the second argument passed to prepare-commit-msg hooks.
+# You can see the different options here: https://git-scm.com/docs/githooks#_prepare_commit_msg
+case "$PRE_COMMIT_COMMIT_MSG_SOURCE" in
+
+    "message")
+        # Do nothing, this is when you commit with -m
+    ;;
+    "template")
+        # Do nothing, this is when you commit with -t
+    ;;
+    "commit")
+        # Do nothing, this is called when you commit with -C, -c or --amend options
+    ;;
+    "merge")
+        # Do nothing, this is called when doing a merge, and some other situations like revert
+    ;;
+    "squash")
+        # Do nothing, this is called when doing a squash, e.g. during interactive rebase
+    ;;
+
+    "")
+        apply_message_template
+    ;;
+
+    *)
+        echo "$PRE_COMMIT_COMMIT_MSG_SOURCE source type not handled"
+        exit 1
+    ;;
+
+esac
