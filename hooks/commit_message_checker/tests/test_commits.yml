@@ -10,6 +10,7 @@ allowed_types:
 
 should_pass:
   - "<type>(scope): description"
+  - 'Revert "<type>(scope): description"'
 
 should_pass_with_fixup_allowed:
   - "fixup! <type>(scope): description"
@@ -18,6 +19,9 @@ should_fail:
   # Check that type cannot be part of a longer word
   - "<type>s(scope): description"
   - "<type>s: description"
+
+  # Missing type
+  - "(scope): description"
 
   # Problems with scope
   - "<type>: description"
@@ -41,3 +45,6 @@ should_fail:
   - "fix! <type>: description"
   - "fixups! <type>(scope): description"
   - "fixups! <type>: description"
+
+  # No space after Revert
+  - "Revert<type>(scope): description"
