@@ -19,7 +19,7 @@ repos:
         name: test-commit-checker-script
         entry: hooks/commit_message_checker/tests/test_commit_checker.py
         language: script
-        stages: [commit]
+        stages: [pre-commit]
         files: ^hooks/commit_message_checker/(commit_msg_checker\.py|tests/test_commit_checker\.py|tests/test_commits\.yml)$
 
   - repo: https://github.com/pre-commit/mirrors-prettier
