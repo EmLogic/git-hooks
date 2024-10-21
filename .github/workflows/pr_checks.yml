@@ -16,3 +16,11 @@ jobs:
           # Needed so we can check a range of commits
           fetch-depth: 0
       - uses: ./actions/check_commit_messages/
+
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python ./hooks/commit_message_checker/tests/test_commit_checker.py
+        shell: bash
