@@ -33,7 +33,7 @@ def commit_msg_is_valid(input_file, allow_prefix: bool) -> bool:
 
         if allow_prefix:
             if not re.match(r"^fixup! ", commit_message):
-                return True # Oops
+                return False
         else:
             return False
 
