@@ -24,3 +24,12 @@ jobs:
       - run: |
           python ./hooks/commit_message_checker/tests/test_commit_checker.py
         shell: bash
+
+  code-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Runs the pre-commit hooks on all files
+      # See the .pre-commit-config.yaml for details of which hooks are run
+      # Note: more secure to point to a SHA than a tag, especially for 3rd party actions
+      - uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd # v3.0.1
