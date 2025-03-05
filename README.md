@@ -130,3 +130,26 @@ does not allow those prefixes, so will fail if a commit has this prefix. The rea
 is it allows users to create fixup commits with `git commit --fixup <commit SHA>`, but we don't
 want these merged to the main branch. To remind users to fixup these commits once a PR is ready for
 merging, this action does not allow them.
+
+# Comment JIRA ticket action
+
+This action allows you to automatically post a link to the JIRA ticket mentioned in the branch
+you are trying to merge in a PR.
+
+```yaml
+name: "Comment Jira Link to PR"
+
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  comment-jira-ticket:
+    runs-on: self-hosted
+    steps:
+      - uses: EmLogic/git-hooks/actions/comment_jira_ticket@main
+        with:
+          jira-project-tag: "HULK"
+          jira-url-path: "https://<your organisation>.atlassian.net/browse"
+```
