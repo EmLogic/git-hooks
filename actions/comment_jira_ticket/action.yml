@@ -1,0 +1,58 @@
+name: "Comment JIRA ticket"
+
+description: |
+  This action searches for valid JIRA tickets on the current branch, and posts a link to that
+  JIRA issue to the PR.
+
+  For example, if your project name is HULK, you might have JIRA tickets such as HULK-103, HULK-104.
+  You might include these in the branch name you are trying to merge e.g. <your name>/HULK-103/add_config_file
+  This action will extract the JIRA ticket name and automatically post a link to that ticket to the PR.
+
+  If you have multiple tickets in your branch name, e.g. <your name>/HULK-103/HULK-104/new_feature, then both
+  tickets will be included in the message posted to the PR.
+
+inputs:
+  jira-project-tag:
+    description: |
+      Tag used in the JIRA project for identifying JIRA tickets. e.g. in the case of HULK-103, the
+      'HULK' part is the jira-project-tag
+    required: true
+  jira-url-path:
+    description: "The URL path to the JIRA tickets e.g. https://<your organisation>.atlassian.net/browse"
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Get Jira Issue
+      id: get-jira-issue
+      run: |
+        match=$(echo "${{ github.head_ref }}" | grep -o '${{ inputs.jira-project-tag }}-[0-9]\+' || true)
+        if [[ -n "$match" ]]; then
+          # In order to output multiline strings, you do some weird stuff
+          # see: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#setting-an-output-parameter
+          # see: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#multiline-strings
+          {
+            echo 'JIRA_ISSUE<<EOF'
+            for item in $match; do
+              echo "Link to JIRA issue: ${{ inputs.jira-url-path }}/$item"
+            done
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+        else
+          echo "No ${{ inputs.jira-project-tag }} issue found in branch name."
+        fi
+      shell: bash
+
+    - name: Post Jira Issue
+      if: ${{ steps.get-jira-issue.outputs.JIRA_ISSUE != '' }}
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            // Back ticks are required for multiline bodies
+            body: `${{ steps.get-jira-issue.outputs.JIRA_ISSUE }}`
+          })
