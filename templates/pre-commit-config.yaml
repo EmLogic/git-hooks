@@ -26,3 +26,8 @@ repos:
       - id: check-shebang-scripts-are-executable
       - id: no-commit-to-branch
         args: ["--branch", "main"]
+
+  - repo: https://github.com/cgnd/zephyr-pre-commit-hooks
+    rev: v1.0.0
+    hooks:
+      - id: zephyr-checkpatch-diff
